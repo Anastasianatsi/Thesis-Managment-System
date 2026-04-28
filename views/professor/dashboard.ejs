@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+    <title>Professor Dashboard - Thesis Management System</title>
+</head>
+
+<body>
+  <%- include('../partials/navbar') %>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Professor Dashboard</h1>
+
+      <%- include('../partials/messages') %>
+
+        <div class="row">
+          <!-- Pending Invitations Card -->
+          <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+              <div class="card-body text-center">
+                <i class="fas fa-envelope card-icon text-primary"></i>
+                <h5 class="card-title">Pending Invitations</h5>
+                <p class="card-count">
+                  <%= pendingInvitations %>
+                </p>
+                <a href="/professor/invitations" class="btn btn-outline-primary mt-3">View Invitations</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supervising Theses Card -->
+          <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+              <div class="card-body text-center">
+                <i class="fas fa-book card-icon text-success"></i>
+                <h5 class="card-title">Supervising Theses</h5>
+                <p class="card-count">
+                  <%= supervisingTheses %>
+                </p>
+                <a href="/professor/theses?role=supervisor" class="btn btn-outline-success mt-3">View Theses</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Committee Theses Card -->
+          <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+              <div class="card-body text-center">
+                <i class="fas fa-users card-icon text-info"></i>
+                <h5 class="card-title">Committee Theses</h5>
+                <p class="card-count">
+                  <%= committeeTheses %>
+                </p>
+                <a href="/professor/theses?role=committee" class="btn btn-outline-info mt-3">View Theses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Quick Actions</h5>
+              </div>
+              <div class="card-body">
+                <div class="list-group">
+                  <a href="/professor/topics/new" class="list-group-item list-group-item-action">
+                    <i class="fas fa-plus-circle me-2"></i> Create New Thesis Topic
+                  </a>
+                  <a href="/professor/topics" class="list-group-item list-group-item-action">
+                    <i class="fas fa-list me-2"></i> Manage Thesis Topics
+                  </a>
+                  <a href="/professor/theses" class="list-group-item list-group-item-action">
+                    <i class="fas fa-tasks me-2"></i> Manage All Theses
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

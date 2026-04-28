@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Secretary Dashboard - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <h1 class="mb-4">Secretary Dashboard</h1>
+    
+    <%- include('../partials/messages') %>
+    
+    <div class="row">
+      <!-- Active Theses Card -->
+      <div class="col-md-6 mb-4">
+        <div class="card dashboard-card">
+          <div class="card-body text-center">
+            <i class="fas fa-book card-icon text-primary"></i>
+            <h5 class="card-title">Active Theses</h5>
+            <p class="card-count"><%= activeTheses %></p>
+            <a href="/secretary/theses?status=active" class="btn btn-outline-primary mt-3">View Active Theses</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Under Review Theses Card -->
+      <div class="col-md-6 mb-4">
+        <div class="card dashboard-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clipboard-check card-icon text-success"></i>
+            <h5 class="card-title">Theses Under Review</h5>
+            <p class="card-count"><%= underReviewTheses %></p>
+            <a href="/secretary/theses?status=under_review" class="btn btn-outline-success mt-3">View Theses Under Review</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-4">
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Quick Actions</h5>
+          </div>
+          <div class="card-body">
+            <div class="list-group">
+              <a href="/secretary/theses?status=active" class="list-group-item list-group-item-action">
+                <i class="fas fa-list me-2"></i> View Active Theses
+              </a>
+              <a href="/secretary/theses?status=under_review" class="list-group-item list-group-item-action">
+                <i class="fas fa-clipboard-check me-2"></i> View Theses Under Review
+              </a>
+              <a href="/secretary/import" class="list-group-item list-group-item-action">
+                <i class="fas fa-file-import me-2"></i> Import User Data
+              </a>
+              <a href="/public/presentations" class="list-group-item list-group-item-action">
+                <i class="fas fa-bullhorn me-2"></i> View Public Presentations
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">System Information</h5>
+          </div>
+          <div class="card-body">
+            <p>Welcome to the Thesis Management System. As a secretary, you can:</p>
+            <ul>
+              <li>View and manage thesis assignments</li>
+              <li>Record faculty meeting information</li>
+              <li>Mark theses as completed</li>
+              <li>Cancel thesis assignments</li>
+              <li>Import user data</li>
+            </ul>
+            <p class="text-muted mt-3">For any technical issues, please contact the system administrator.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

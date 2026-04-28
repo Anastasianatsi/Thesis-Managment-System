@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Invite Committee Members - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Invite Committee Members</h4>
+          </div>
+          <div class="card-body">
+            <%- include('../partials/messages') %>
+            
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i> You need to invite two professors to form your thesis committee.
+            </div>
+            
+            <div class="mb-4">
+              <h5>Thesis Details</h5>
+              <p><strong>Title:</strong> <%= thesis.title %></p>
+            </div>
+            
+            <div class="mb-4">
+              <h5>Current Committee Members</h5>
+              <% if (committeeMembers.length === 0) { %>
+                <p class="text-muted">No committee members invited yet.</p>
+              <% } else { %>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Invitation Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% committeeMembers.forEach(member => { %>
+                        <tr>
+                          <td><%= member.first_name %> <%= member.last_name %></td>
+                          <td>
+                            <span class="badge <%= member.status === 'pending' ? 'bg-warning text-dark' : member.status === 'accepted' ? 'bg-success' : 'bg-danger' %>">
+                              <%= member.status.toUpperCase() %>
+                            </span>
+                          </td>
+                          <td><%= new Date(member.invitation_date).toLocaleDateString() %></td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } %>
+            </div>
+            <!-- allow professor invitation as long as no more than 2 people have accepted -->
+            <% if (committeeMembers.filter(m => m.status === 'accepted').length < 2) { %>
+              <div class="mb-4">
+                <h5>Invite Professor</h5>
+                <form action="/student/thesis/invite" method="POST">
+                  <div class="mb-3">
+                    <label for="professorId" class="form-label required-field">Select Professor</label>
+                    <select class="form-select" id="professorId" name="professorId" required>
+                      <option value="" selected disabled>-- Select a professor --</option>
+                      <% professors.forEach(professor => { %>
+                        <option value="<%= professor.id %>"><%= professor.first_name %> <%= professor.last_name %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Send Invitation</button>
+                  </div>
+                </form>
+              </div>
+            <% } else { %>
+              <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i> You have successfully formed your thesis committee!
+              </div>
+            <% } %>
+            
+            <div class="d-grid mt-4">
+              <a href="/student/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

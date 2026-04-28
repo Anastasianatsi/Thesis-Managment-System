@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Include shared <head> content like meta tags, stylesheets, etc. -->
+  <%- include('../partials/head') %>
+    <title>Thesis Evaluation - Thesis Management System</title>
+</head>
+
+<body>
+  <!-- Include the navigation bar (reusable partial) -->
+  <%- include('../partials/navbar') %>
+
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">Thesis Evaluation</h4>
+            </div>
+            <div class="card-body">
+              <!-- Include flash messages (like success/error alerts) -->
+              <%- include('../partials/messages') %>
+
+                <!-- Section showing the main details of the thesis -->
+                <div class="mb-4">
+                  <h5>Thesis Details</h5>
+                  <p><strong>Title:</strong>
+                    <%= thesis.title %>
+                  </p>
+                  <p><strong>Student:</strong>
+                    <%= thesis.student_first_name %>
+                      <%= thesis.student_last_name %> (<%= thesis.registration_number %>)
+                  </p>
+                  <p><strong>Supervisor:</strong>
+                    <%= thesis.supervisor_first_name %>
+                      <%= thesis.supervisor_last_name %>
+                  </p>
+                  <p>
+                    <strong>Status:</strong>
+                    <!-- Dynamically apply CSS class and format status text -->
+                    <span class="badge status-<%= thesis.status %>">
+                      <%= thesis.status.replace('_', ' ' ).toUpperCase() %>
+                        <!-- e.g., 'under_review' becomes 'UNDER REVIEW' -->
+                    </span>
+                  </p>
+                </div>
+
+                <!-- Committee members list -->
+                <div class="mb-4">
+                  <h5>Committee Members</h5>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Role</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Always show supervisor as the first row -->
+                        <tr>
+                          <td>
+                            <%= thesis.supervisor_first_name %>
+                              <%= thesis.supervisor_last_name %>
+                          </td>
+                          <td><span class="badge bg-primary">Supervisor</span></td>
+                        </tr>
+                        <!-- Loop over the list of committee members and display their names -->
+                        <% committeeMembers.forEach(member=> { %>
+                          <tr>
+                            <td>
+                              <%= member.first_name %>
+                                <%= member.last_name %>
+                            </td>
+                            <td><span class="badge bg-info">Committee Member</span></td>
+                          </tr>
+                          <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Show evaluations if they exist -->
+                <% if (evaluations.length> 0) { %>
+                  <div class="mb-4">
+                    <h5>Evaluation Results</h5>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Evaluator</th>
+                            <th>Content Quality (40%)</th>
+                            <th>Presentation Quality (20%)</th>
+                            <th>Technical Quality (30%)</th>
+                            <th>Innovation (10%)</th>
+                            <th>Final Grade</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Loop through each evaluation and display the scores -->
+                          <% evaluations.forEach(evaluation=> { %>
+                            <tr>
+                              <td>
+                                <%= evaluation.first_name %>
+                                  <%= evaluation.last_name %>
+                              </td>
+                              <td>
+                                <%= evaluation.content_quality %>
+                              </td>
+                              <td>
+                                <%= evaluation.presentation_quality %>
+                              </td>
+                              <td>
+                                <%= evaluation.technical_quality %>
+                              </td>
+                              <td>
+                                <%= evaluation.innovation %>
+                              </td>
+                              <td><strong>
+                                  <%= evaluation.final_grade %>
+                                </strong></td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Show the average/final grade if calculated -->
+                    <% if (averageGrade) { %>
+                      <div class="alert alert-success mt-3">
+                        <h5 class="mb-0">Final Grade: <%= averageGrade %>
+                        </h5>
+                      </div>
+                      <% } %>
+                  </div>
+                  <% } else { %>
+                    <!-- Show this message if there are no evaluations yet -->
+                    <div class="alert alert-info mb-4">
+                      <i class="fas fa-info-circle me-2"></i> No evaluations have been submitted yet.
+                    </div>
+                    <% } %>
+
+                      <!-- This form only shows up if: 
+                 1. Thesis is under review
+                 2. At least 3 evaluations are submitted
+                 3. Repository link is not yet submitted -->
+                      <% if (thesis.status==='under_review' && evaluations.length>= 3 && !thesis.repository_link) { %>
+                        <div class="mb-4">
+                          <h5>Submit Repository Link</h5>
+                          <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i> Please submit the link to your thesis in
+                            the university repository (Nimertis).
+                          </div>
+
+                          <!-- Form for submitting the repository link -->
+                          <form action="/student/thesis/repository" method="POST">
+                            <div class="mb-3">
+                              <label for="repositoryLink" class="form-label required-field">Repository Link</label>
+                              <input type="url" class="form-control" id="repositoryLink" name="repositoryLink"
+                                placeholder="https://repository.university.edu/thesis/..." required>
+                            </div>
+
+                            <div class="d-grid">
+                              <button type="submit" class="btn btn-primary">Submit Repository Link</button>
+                            </div>
+                          </form>
+                        </div>
+                        <% } else if (thesis.repository_link) { %>
+                          <!-- If repository link exists, show it as a button -->
+                          <div class="mb-4">
+                            <h5>Repository Link</h5>
+                            <a href="<%= thesis.repository_link %>" target="_blank" class="btn btn-outline-info">
+                              <i class="fas fa-external-link-alt me-2"></i> View in Repository
+                            </a>
+                          </div>
+                          <% } %>
+
+                            <!-- Button to return to the student dashboard -->
+                            <div class="d-grid mt-4">
+                              <a href="/student/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+                            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include shared footer -->
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Import Data - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Import User Data</h4>
+          </div>
+          <div class="card-body">
+            <%- include('../partials/messages') %>
+            
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i> Upload a JSON file containing student and professor data to import into the system.
+            </div>
+            
+            <form action="/secretary/import" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="jsonFile" class="form-label required-field">JSON File</label>
+                <input type="file" class="form-control" id="jsonFile" name="jsonFile" accept=".json" required>
+                <div class="form-text">
+                  The JSON file should contain arrays of students and professors with their details.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <h5>Expected JSON Format</h5>
+                <pre class="bg-light p-3 rounded">
+{
+  "students": [
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "registration_number": "20180001"
+    },
+    ...
+  ],
+  "professors": [
+    {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane.smith@example.com",
+      "department": "Computer Science"
+    },
+    ...
+  ]
+}</pre>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/secretary/dashboard" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">Import Data</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

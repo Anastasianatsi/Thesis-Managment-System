@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Upload Thesis Document - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Upload Thesis Document</h4>
+          </div>
+          <div class="card-body">
+            <%- include('../partials/messages') %>
+            
+            <div class="mb-4">
+              <h5>Thesis Details</h5>
+              <p><strong>Title:</strong> <%= thesis.title %></p>
+            </div>
+            
+            <% if (submission) { %>
+              <div class="alert alert-success mb-4">
+                <i class="fas fa-check-circle me-2"></i> You have already uploaded your thesis document.
+                <div class="mt-2">
+                  <strong>Uploaded on:</strong> <%= new Date(submission.created_at).toLocaleDateString() %>
+                </div>
+                <div class="mt-2">
+                  <a href="/uploads/<%= submission.document_path %>" target="_blank" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-file-alt me-2"></i> View Document
+                  </a>
+                </div>
+              </div>
+            <% } %>
+            
+            <form action="/student/thesis/upload" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="document" class="form-label required-field">Thesis Document</label>
+                <input type="file" class="form-control" id="document" name="document" accept=".pdf,.doc,.docx" required>
+                <div class="form-text">Upload your thesis document (PDF, DOC, or DOCX format).</div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="additionalLinks" class="form-label">Additional Resources</label>
+                <textarea class="form-control" id="additionalLinks" name="additionalLinks" rows="3" placeholder="Enter links to additional resources (one per line)"></textarea>
+                <div class="form-text">Add links to additional resources (e.g., GitHub repository, video presentation, etc.).</div>
+              </div>
+              
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/student/dashboard" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">Upload Document</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

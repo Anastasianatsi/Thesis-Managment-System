@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+    <title>Edit Thesis Topic - Thesis Management System</title>
+</head>
+
+<body>
+  <%- include('../partials/navbar') %>
+
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">Edit Thesis Topic</h4>
+            </div>
+            <div class="card-body">
+              <%- include('../partials/messages') %>
+
+                <form id="editTopicForm">
+                  <div class="mb-3">
+                    <label for="title" class="form-label required-field">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%= topic.title %>" required>
+                    <div class="form-text">Provide a clear and concise title for the thesis topic.</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="summary" class="form-label required-field">Summary</label>
+                    <textarea class="form-control" id="summary" name="summary" rows="5"
+                      required><%= topic.summary %></textarea>
+                    <div class="form-text">Provide a brief summary of the thesis topic (max 500 words).</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Description File (PDF)</label>
+                    <input type="file" class="form-control" id="description" name="description" accept=".pdf">
+                    <div class="form-text">
+                      Upload a new description file (optional).
+                      <% if (topic.description_file) { %>
+                        <br>Current file: <a href="/uploads/<%= topic.description_file %>" target="_blank">
+                          <%= topic.description_file %>
+                        </a>
+                        <% } %>
+                    </div>
+                  </div>
+
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="/professor/topics" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                    <button type="button" class="btn btn-primary" id="updateTopicButton">Update Topic</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+
+      <script>
+        document.getElementById('updateTopicButton').addEventListener('click', async function () {
+          const form = document.getElementById('editTopicForm');
+          const formData = new FormData(form);
+
+          try {
+            const response = await fetch(`/professor/topics/<%= topic.id %>`, {
+              method: 'PUT',
+              body: formData,
+            });
+            window.location.href = response.url;
+      } catch (err) {
+            console.error('Error:', err);
+            alert('An unexpected error occurred.');
+          }
+        });
+      </script>
+</body>
+
+</html>

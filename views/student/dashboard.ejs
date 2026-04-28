@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Student Dashboard - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <h1 class="mb-4">Student Dashboard</h1>
+    
+    <%- include('../partials/messages') %>
+    
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Your Thesis</h5>
+          </div>
+          <div class="card-body">
+            <% if (!thesis) { %>
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> You don't have an assigned thesis yet.
+              </div>
+            <% } else { %>
+              <h4><%= thesis.title %></h4>
+              <p class="text-muted">
+                <span class="badge status-<%= thesis.status %>">
+                  <%= thesis.status.replace('_', ' ').toUpperCase() %>
+                </span>
+              </p>
+              
+              <div class="mt-3">
+                <p><%= thesis.summary %></p>
+              </div>
+              
+              <div class="mt-4">
+                <h5>Supervisor</h5>
+                <p><%= thesis.supervisor_first_name %> <%= thesis.supervisor_last_name %></p>
+              </div>
+              
+              <% if (daysSinceAssignment) { %>
+                <div class="alert alert-info mt-4">
+                  <i class="fas fa-calendar-alt me-2"></i> Your thesis has been active for <strong><%= daysSinceAssignment %> days</strong>.
+                </div>
+              <% } %>
+              
+              <div class="mt-4">
+                <h5>Committee Members</h5>
+                <% if (committeeMembers.length === 0) { %>
+                  <p class="text-muted">No committee members assigned yet.</p>
+                <% } else { %>
+                  <ul class="list-group">
+                    <% committeeMembers.forEach(member => { %>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <%= member.first_name %> <%= member.last_name %>
+                        <span class="badge <%= member.status === 'pending' ? 'bg-warning text-dark' : member.status === 'accepted' ? 'bg-success' : 'bg-danger' %>">
+                          <%= member.status.toUpperCase() %>
+                        </span>
+                      </li>
+                    <% }) %>
+                  </ul>
+                <% } %>
+              </div>
+              
+              <div class="mt-4">
+                <% if (thesis.status === 'pending') { %>
+                  <a href="/student/thesis/invite" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i> Invite Committee Members
+                  </a>
+                <% } else if (thesis.status === 'under_review') { %>
+                  <div class="d-flex flex-wrap gap-2">
+                    <a href="/student/thesis/upload" class="btn btn-primary">
+                      <i class="fas fa-file-upload me-2"></i> Upload Thesis Document
+                    </a>
+                    <a href="/student/thesis/presentation" class="btn btn-info">
+                      <i class="fas fa-calendar-alt me-2"></i> Set Presentation Details
+                    </a>
+                    <a href="/student/thesis/evaluation" class="btn btn-success">
+                      <i class="fas fa-star me-2"></i> View Evaluation
+                    </a>
+                  </div>
+                <% } else if (thesis.status === 'completed') { %>
+                  <a href="/student/thesis/evaluation" class="btn btn-success">
+                    <i class="fas fa-star me-2"></i> View Final Evaluation
+                  </a>
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Quick Actions</h5>
+          </div>
+          <div class="card-body">
+            <div class="list-group">
+              <a href="/student/profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user-edit me-2"></i> Edit Profile
+              </a>
+              
+              <% if (thesis && thesis.status === 'pending') { %>
+                <a href="/student/thesis/invite" class="list-group-item list-group-item-action">
+                  <i class="fas fa-user-plus me-2"></i> Invite Committee Members
+                </a>
+              <% } else if (thesis && thesis.status === 'under_review') { %>
+                <a href="/student/thesis/upload" class="list-group-item list-group-item-action">
+                  <i class="fas fa-file-upload me-2"></i> Upload Thesis Document
+                </a>
+                <a href="/student/thesis/presentation" class="list-group-item list-group-item-action">
+                  <i class="fas fa-calendar-alt me-2"></i> Set Presentation Details
+                </a>
+                <a href="/student/thesis/evaluation" class="list-group-item list-group-item-action">
+                  <i class="fas fa-star me-2"></i> View Evaluation
+                </a>
+              <% } %>
+              
+              <a href="/public/presentations" class="list-group-item list-group-item-action">
+                <i class="fas fa-bullhorn me-2"></i> View Public Presentations
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Thesis Process</h5>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Topic Assignment</strong></p>
+                <p class="text-muted small">A professor assigns a thesis topic to you.</p>
+              </div>
+              
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Committee Formation</strong></p>
+                <p class="text-muted small">Invite professors to form your thesis committee.</p>
+              </div>
+              
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Thesis Development</strong></p>
+                <p class="text-muted small">Work on your thesis with guidance from your supervisor.</p>
+              </div>
+              
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Document Submission</strong></p>
+                <p class="text-muted small">Upload your thesis document for review.</p>
+              </div>
+              
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Presentation</strong></p>
+                <p class="text-muted small">Present your thesis to the committee.</p>
+              </div>
+              
+              <div class="timeline-item">
+                <p class="mb-1"><strong>Evaluation</strong></p>
+                <p class="text-muted small">Receive grades from the committee members.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

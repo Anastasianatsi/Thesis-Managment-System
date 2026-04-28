@@ -1,0 +1,140 @@
+/* Modern styles for Thesis Management System */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+/* Footer sticks to the bottom */
+.footer {
+  margin-top: auto;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Dashboard cards */
+.dashboard-card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  cursor: pointer;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-card .card-icon {
+  font-size: 2.75rem;
+  margin-bottom: 1rem;
+  color: #3b82f6;
+}
+
+.dashboard-card .card-count {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Thesis status badges */
+.status-pending {
+  background-color: #fde68a;
+  color: #92400e;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #bfdbfe;
+  color: #1e40af;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+.status-under_review {
+  background-color: #ddd6fe;
+  color: #5b21b6;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+.status-completed {
+  background-color: #bbf7d0;
+  color: #166534;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+.status-cancelled {
+  background-color: #fecaca;
+  color: #991b1b;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 500;
+}
+
+/* Timeline styles */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #d1d5db;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.75rem;
+  padding-left: 1rem;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #d1d5db;
+}
+
+/* Required form fields */
+.required-field::after {
+  content: "*";
+  color: #ef4444;
+  margin-left: 4px;
+}
+

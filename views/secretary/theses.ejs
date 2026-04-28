@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Thesis List - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Thesis List</h1>
+      <a href="/secretary/dashboard" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+      </a>
+    </div>
+    
+    <%- include('../partials/messages') %>
+    
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Filter by Status</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap gap-2">
+          <a href="/secretary/theses?status=active" class="btn <%= status === 'active' ? 'btn-primary' : 'btn-outline-primary' %>">Active</a>
+          <a href="/secretary/theses?status=under_review" class="btn <%= status === 'under_review' ? 'btn-primary' : 'btn-outline-primary' %>">Under Review</a>
+          <a href="/secretary/theses?status=completed" class="btn <%= status === 'completed' ? 'btn-primary' : 'btn-outline-primary' %>">Completed</a>
+          <a href="/secretary/theses?status=cancelled" class="btn <%= status === 'cancelled' ? 'btn-primary' : 'btn-outline-primary' %>">Cancelled</a>
+        </div>
+      </div>
+    </div>
+    
+    <% if (theses.length === 0) { %>
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i> No thesis assignments found with the selected status.
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Title</th>
+              <th>Student</th>
+              <th>Supervisor</th>
+              <th>Assignment Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% theses.forEach(thesis => { %>
+              <tr>
+                <td><%= thesis.title %></td>
+                <td><%= thesis.student_first_name %> <%= thesis.student_last_name %> (<%= thesis.registration_number %>)</td>
+                <td><%= thesis.supervisor_first_name %> <%= thesis.supervisor_last_name %></td>
+                <td>
+                  <% if (thesis.assignment_date) { %>
+                    <%= new Date(thesis.assignment_date).toLocaleDateString() %>
+                  <% } else { %>
+                    <span class="text-muted">Not yet assigned</span>
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/secretary/theses/<%= thesis.id %>" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> View
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

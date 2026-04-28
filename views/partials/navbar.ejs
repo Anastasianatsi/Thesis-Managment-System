@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="/">Thesis Management System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <% if (locals.user) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          
+          <% if (user.role === 'professor') { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/professor/topics">Thesis Topics</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/professor/theses">Theses</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/professor/invitations">Invitations</a>
+            </li>
+          <% } else if (user.role === 'student') { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/profile">Profile</a>
+            </li>
+          <% } else if (user.role === 'secretary') { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/secretary/theses">Theses</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/secretary/import">Import Data</a>
+            </li>
+          <% } %>
+        <% } %>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/public/presentations">Public Presentations</a>
+        </li>
+      </ul>
+      
+      <ul class="navbar-nav">
+        <% if (locals.user) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+              <%= user.username %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

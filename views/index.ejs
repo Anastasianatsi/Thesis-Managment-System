@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+  <title>Thesis Management System</title>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">Thesis Management System</h1>
+        <p class="lead">A comprehensive system for managing university thesis projects</p>
+        
+        <div class="mt-5">
+          <a href="/login" class="btn btn-primary btn-lg">Login to System</a>
+        </div>
+        
+        <div class="mt-5">
+          <h2>About the System</h2>
+          <p>
+            This system facilitates the entire thesis process from topic creation to final evaluation.
+            It supports three types of users: Professors, Students, and Secretary staff.
+          </p>
+          
+          <div class="row mt-4">
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Professors</h5>
+                  <p class="card-text">Create thesis topics, supervise students, participate in committees, and evaluate theses.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Students</h5>
+                  <p class="card-text">Apply for thesis topics, form committees, submit documents, and schedule presentations.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Secretary</h5>
+                  <p class="card-text">Manage thesis records, import user data, and oversee the administrative process.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('partials/footer') %>
+</body>
+</html>

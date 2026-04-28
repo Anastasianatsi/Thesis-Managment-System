@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+    <title>Thesis Details - Thesis Management System</title>
+</head>
+
+<body>
+  <%- include('../partials/navbar') %>
+
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Thesis Details</h1>
+        <a href="/professor/theses" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-2"></i> Back to List
+        </a>
+      </div>
+
+      <%- include('../partials/messages') %>
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Basic Information</h5>
+              </div>
+              <div class="card-body">
+                <h4>
+                  <%= thesis.title %>
+                </h4>
+                <p class="text-muted">
+                  <span class="badge status-<%= thesis.status %>">
+                    <%= thesis.status.replace('_', ' ' ).toUpperCase() %>
+                  </span>
+                </p>
+
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <h5>Student</h5>
+                    <p>
+                      <%= thesis.student_first_name %>
+                        <%= thesis.student_last_name %>
+                    </p>
+                    <p>Registration Number: <%= thesis.registration_number %>
+                    </p>
+                  </div>
+
+                  <div class="col-md-6">
+                    <h5>Supervisor</h5>
+                    <p>
+                      <%= thesis.supervisor_first_name %>
+                        <%= thesis.supervisor_last_name %>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <h5>Summary</h5>
+                  <p>
+                    <%= thesis.summary %>
+                  </p>
+                </div>
+
+                <% if (thesis.description_file) { %>
+                  <div class="mt-4">
+                    <h5>Description File</h5>
+                    <a href="/uploads/<%= thesis.description_file %>" target="_blank"
+                      class="btn btn-outline-primary">
+                      <i class="fas fa-file-pdf me-2"></i> View Description
+                    </a>
+                  </div>
+                  <% } %>
+
+                    <% if (thesis.faculty_meeting_number) { %>
+                      <div class="mt-4">
+                        <h5>Faculty Meeting Information</h5>
+                        <p>Meeting Number: <%= thesis.faculty_meeting_number %>
+                        </p>
+                        <p>Meeting Year: <%= thesis.faculty_meeting_year %>
+                        </p>
+                      </div>
+                      <% } %>
+
+                        <% if (thesis.repository_link) { %>
+                          <div class="mt-4">
+                            <h5>Repository Link</h5>
+                            <a href="<%= thesis.repository_link %>" target="_blank" class="btn btn-outline-info">
+                              <i class="fas fa-external-link-alt me-2"></i> View in Repository
+                            </a>
+                          </div>
+                          <% } %>
+              </div>
+            </div>
+
+            <div class="card mb-4">
+              <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Committee Members</h5>
+              </div>
+              <div class="card-body">
+                <% if (committeeMembers.length===0) { %>
+                  <p class="text-muted">No committee members have been assigned yet.</p>
+                  <% } else { %>
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Invitation Date</th>
+                            <th>Response Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% committeeMembers.forEach(member=> { %>
+                            <tr>
+                              <td>
+                                <%= member.first_name %>
+                                  <%= member.last_name %>
+                              </td>
+                              <td>
+                                <% if (member.status==='pending' ) { %>
+                                  <span class="badge bg-warning text-dark">Pending</span>
+                                  <% } else if (member.status==='accepted' ) { %>
+                                    <span class="badge bg-success">Accepted</span>
+                                    <% } else { %>
+                                      <span class="badge bg-danger">Rejected</span>
+                                      <% } %>
+                              </td>
+                              <td>
+                                <%= new Date(member.invitation_date).toLocaleString() %>
+                              </td>
+                              <td>
+                                <% if (member.response_date) { %>
+                                  <%= new Date(member.response_date).toLocaleString() %>
+                                    <% } else { %>
+                                      <span class="text-muted">No response yet</span>
+                                      <% } %>
+                              </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <% } %>
+              </div>
+            </div>
+
+            <% if (submission) { %>
+              <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                  <h5 class="mb-0">Thesis Submission</h5>
+                </div>
+                <div class="card-body">
+                  <p>
+                    <strong>Submitted:</strong>
+                    <%= new Date(submission.created_at).toLocaleString() %>
+                  </p>
+
+                  <div class="mt-3">
+                    <a href="/uploads/<%= submission.document_path %>" target="_blank"
+                      class="btn btn-outline-primary">
+                      <i class="fas fa-file-alt me-2"></i> View Document
+                    </a>
+                  </div>
+
+                  <% if (submission.additional_links) { %>
+                    <div class="mt-4">
+                      <h6>Additional Resource</h6>
+                      <a href="<%= submission.additional_links.trim() %>" target="_blank" class="btn btn-outline-secondary">
+                      <i class="fas fa-link me-2"></i> View Resource
+                      </a>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <% } %>
+
+                <% if (presentation) { %>
+                  <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                      <h5 class="mb-0">Presentation Details</h5>
+                    </div>
+                    <div class="card-body">
+                      <p>
+                        <strong>Date and Time:</strong>
+                        <%= new Date(presentation.presentation_date).toLocaleString() %>
+                      </p>
+
+                      <p>
+                        <strong>Location:</strong>
+                        <% if (presentation.is_online) { %>
+                          <a href="<%= presentation.location %>" target="_blank">
+                            <%= presentation.location %>
+                          </a>
+                          <span class="badge bg-info ms-2">Online</span>
+                          <% } else { %>
+                            <%= presentation.location %>
+                              <span class="badge bg-secondary ms-2">In Person</span>
+                              <% } %>
+                      </p>
+
+                      <% if (isSupervisor && thesis.status==='under_review' ) { %>
+                        <div class="mt-3">
+                          <a href="/professor/theses/announcement?id=<%= thesis.id %>" target="_blank"
+                            class="btn btn-outline-warning">
+                            <i class="fas fa-bullhorn me-2"></i> Generate Announcement
+                          </a>
+                        </div>
+                        <% } %>
+                    </div>
+                  </div>
+                  <% } %>
+
+                    <% if (evaluations.length> 0) { %>
+                      <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                          <h5 class="mb-0">Evaluations</h5>
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Evaluator</th>
+                                  <th>Content</th>
+                                  <th>Presentation</th>
+                                  <th>Technical</th>
+                                  <th>Innovation</th>
+                                  <th>Final Grade</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% evaluations.forEach(evaluation=> { %>
+                                  <tr>
+                                    <td>
+                                      <%= evaluation.first_name %>
+                                        <%= evaluation.last_name %>
+                                    </td>
+                                    <td>
+                                      <%= evaluation.content_quality %>
+                                    </td>
+                                    <td>
+                                      <%= evaluation.presentation_quality %>
+                                    </td>
+                                    <td>
+                                      <%= evaluation.technical_quality %>
+                                    </td>
+                                    <td>
+                                      <%= evaluation.innovation %>
+                                    </td>
+                                    <td><strong>
+                                        <%= evaluation.final_grade %>
+                                      </strong></td>
+                                  </tr>
+                                  <% }) %>
+                              </tbody>
+                            </table>
+                          </div>
+
+                          <% if (evaluations.length>= 3) { %>
+                            <div class="alert alert-success mt-3">
+                              <h5>Average Grade: <%= (evaluations.reduce((sum, e)=> sum + parseFloat(e.final_grade), 0)
+                                  / evaluations.length).toFixed(1) %></h5>
+                            </div>
+                            <% } %>
+                        </div>
+                      </div>
+                      <% } %>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Actions</h5>
+              </div>
+              <div class="card-body">
+                <% if (thesis.status==='pending' && isSupervisor) { %>
+                  <form action="/professor/theses/<%= thesis.id %>/cancel" method="POST" class="mb-3">
+                    <button type="submit" class="btn btn-danger w-100"
+                      onclick="return confirm('Are you sure you want to cancel this thesis assignment?')">
+                      <i class="fas fa-times-circle me-2"></i> Cancel Assignment
+                    </button>
+                  </form>
+                  <% } else if (thesis.status==='active' && isSupervisor) { %>
+                    <form action="/professor/theses/<%= thesis.id %>/under-review" method="POST" class="mb-3">
+                      <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-clipboard-check me-2"></i> Move to Under Review
+                      </button>
+                    </form>
+
+                    <form action="/professor/theses/<%= thesis.id %>/cancel" method="POST" class="mb-3">
+                      <button type="submit" class="btn btn-danger w-100"
+                        onclick="return confirm('Are you sure you want to cancel this thesis assignment?')">
+                        <i class="fas fa-times-circle me-2"></i> Cancel Assignment
+                      </button>
+                    </form>
+                    <% } else if (thesis.status==='under_review' ) { %>
+                      <% if (!hasEvaluated) { %>
+                        <button type="button" class="btn btn-success w-100 mb-3" data-bs-toggle="modal"
+                          data-bs-target="#evaluationModal">
+                          <i class="fas fa-star me-2"></i> Evaluate Thesis
+                        </button>
+                        <% } %>
+                          <% } %>
+
+                            <% if (thesis.status==='active' || thesis.status==='under_review' ) { %>
+                              <button type="button" class="btn btn-info w-100 mb-3" data-bs-toggle="modal"
+                                data-bs-target="#noteModal">
+                                <i class="fas fa-sticky-note me-2"></i> Add Note
+                              </button>
+                              <% } %>
+              </div>
+            </div>
+
+            <div class="card mb-4">
+              <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Your Notes</h5>
+              </div>
+              <div class="card-body">
+                <% if (notes.length===0) { %>
+                  <p class="text-muted">You haven't added any notes yet.</p>
+                  <% } else { %>
+                    <div class="timeline">
+                      <% notes.forEach(note=> { %>
+                        <div class="timeline-item">
+                          <p class="mb-1">
+                            <%= note.note %>
+                          </p>
+                          <p class="text-muted small">
+                            <%= new Date(note.created_at).toLocaleString() %>
+                          </p>
+                        </div>
+                        <% }) %>
+                    </div>
+                    <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="noteModalLabel">Add Note</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="/professor/theses/<%= thesis.id %>/notes" method="POST">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="note" class="form-label">Note (max 300 characters)</label>
+                <textarea class="form-control" id="note" name="note" rows="3" maxlength="300" required></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Note</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evaluation Modal -->
+    <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="evaluationModalLabel">Evaluate Thesis</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="/professor/theses/<%= thesis.id %>/evaluate" method="POST">
+            <div class="modal-body">
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> Please evaluate the thesis on a scale of 0-10 for each
+                criterion.
+              </div>
+
+              <div class="mb-3">
+                <label for="contentQuality" class="form-label">Content Quality (60%)</label>
+                <input type="number" class="form-control" id="contentQuality" name="contentQuality" min="0" max="10"
+                  step="0.1" required>
+                <div class="form-text">Quality of the thesis and degree of achievement of its objectives (60%), as
+                  defined at the topic declaration.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="presentationQuality" class="form-label">Time (15%)</label>
+                <input type="number" class="form-control" id="presentationQuality" name="presentationQuality" min="0"
+                  max="10" step="0.1" required>
+                <div class="form-text">Time period of completion (15%). This criterion is graded as excellent only if
+                  the thesis was completed in less than 1.5
+                  years (unless there are force majeure reasons or an extension was agreed with the supervisor).
+
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="technicalQuality" class="form-label">Technical Quality (15%)</label>
+                <input type="number" class="form-control" id="technicalQuality" name="technicalQuality" min="0" max="10"
+                  step="0.1" required>
+                <div class="form-text">Quality and completeness of the thesis text and other deliverables (15%).
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="innovation" class="form-label">Impression (10%)</label>
+                <input type="number" class="form-control" id="innovation" name="innovation" min="0" max="10" step="0.1"
+                  required>
+                <div class="form-text">Overall impression of the presentation (10%).
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success">Submit Evaluation</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

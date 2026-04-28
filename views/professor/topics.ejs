@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <title>Thesis Topics - Thesis Management System</title>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Thesis Topics</h1>
+      <a href="/professor/topics/new" class="btn btn-primary">
+        <i class="fas fa-plus-circle me-2"></i> Create New Topic
+      </a>
+    </div>
+    
+    <%- include('../partials/messages') %>
+    
+    <% if (topics.length === 0) { %>
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i> You haven't created any thesis topics yet.
+      </div>
+    <% } else { %>
+      <div class="row">
+        <% topics.forEach(topic => { %>
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><%= topic.title %></h5>
+                <span class="badge <%= topic.is_assigned ? 'bg-success' : 'bg-primary' %>">
+                  <%= topic.is_assigned ? 'Assigned' : 'Available' %>
+                </span>
+              </div>
+              <div class="card-body">
+                <p><%= topic.summary %></p>
+                
+                <% if (topic.description_file) { %>
+                  <p>
+                    <a href="/uploads/<%= topic.description_file %>" target="_blank" class="text-decoration-none">
+                      <i class="fas fa-file-pdf me-2"></i> View Description File
+                    </a>
+                  </p>
+                <% } %>
+                
+                <p class="text-muted small">
+                  <i class="fas fa-calendar-alt me-2"></i> Created: <%= new Date(topic.created_at).toLocaleDateString() %>
+                </p>
+              </div>
+              <div class="card-footer">
+                <div class="btn-group w-100">
+                  <a href="/professor/topics/<%= topic.id %>/edit" class="btn btn-outline-primary">
+                    <i class="fas fa-edit me-2"></i> Edit
+                  </a>
+                  
+                  <% if (!topic.is_assigned) { %>
+                    <a href="/professor/topics/<%= topic.id %>/assign" class="btn btn-outline-success">
+                      <i class="fas fa-user-plus me-2"></i> Assign
+                    </a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
